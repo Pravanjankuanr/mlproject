@@ -1,0 +1,409 @@
+<html>
+<head>
+    <title>Student Exam Performance Indicator</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body{
+            background: linear-gradient(135deg,#667eea,#764ba2);
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:flex-start;
+            overflow-y:auto;
+            padding:30px 15px;
+        }
+
+        .login{
+            width:100%;
+            max-width:750px;
+            background:white;
+            padding:35px;
+            border-radius:20px;
+            box-shadow:0 10px 30px rgba(0,0,0,0.2);
+            animation:fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn{
+            from{
+                opacity:0;
+                transform:translateY(20px);
+            }
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+
+        .login h1{
+            text-align:center;
+            color:#333;
+            margin-bottom:25px;
+        }
+
+        legend{
+            text-align:center;
+            font-size:26px;
+            font-weight:bold;
+            color:#444;
+            margin-bottom:25px;
+        }
+
+        .mb-3{
+            margin-bottom:20px;
+        }
+
+        .form-label{
+            display:block;
+            margin-bottom:8px;
+            font-weight:bold;
+            color:#555;
+        }
+
+        .form-control{
+            width:100%;
+            padding:14px;
+            border-radius:10px;
+            border:1px solid #ccc;
+            font-size:16px;
+            transition:0.3s;
+            background:#fafafa;
+        }
+
+        .form-control:focus{
+            border-color:#667eea;
+            outline:none;
+            background:white;
+            box-shadow:0 0 10px rgba(102,126,234,0.3);
+        }
+
+        .button-group{
+            display:flex;
+            justify-content:center;
+            gap:15px;
+            margin-top:25px;
+            flex-wrap:wrap;
+        }
+
+        .btn{
+            padding:14px 25px;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+            font-size:16px;
+            font-weight:bold;
+            transition:0.3s;
+        }
+
+        .btn-primary{
+            background:#667eea;
+            color:white;
+        }
+
+        .btn-primary:hover{
+            background:#5563d6;
+            transform:translateY(-2px);
+        }
+
+        .btn-clear{
+            background:#e74c3c;
+            color:white;
+        }
+
+        .btn-clear:hover{
+            background:#c0392b;
+            transform:translateY(-2px);
+        }
+
+        .result-box{
+            margin-top:30px;
+            background:#f4f7ff;
+            border-left:6px solid #667eea;
+            padding:20px;
+            border-radius:12px;
+            text-align:center;
+            animation:fadeIn 0.5s ease;
+        }
+
+        .result-box h2{
+            color:#333;
+            font-size:24px;
+        }
+
+        .result{
+            margin-top:10px;
+            font-size:32px;
+            font-weight:bold;
+            color:#667eea;
+        }
+
+        @media(max-width:768px){
+
+            .login{
+                padding:25px;
+            }
+
+            .btn{
+                width:100%;
+            }
+
+            .button-group{
+                flex-direction:column;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="login">
+
+    <h1>Student Exam Performance Indicator</h1>
+
+    <form action="{{ url_for('predict') }}" method="post" id="prediction-form">
+
+        <legend>Student Exam Performance Prediction</legend>
+
+        <!-- Gender -->
+        <div class="mb-3">
+            <label class="form-label">Gender</label>
+
+            <select class="form-control" name="gender" required>
+
+                <option value="" disabled
+                {% if not request.form.get('gender') %}selected{% endif %}>
+                    Select your Gender
+                </option>
+
+                <option value="male"
+                {% if request.form.get('gender') == 'male' %}selected{% endif %}>
+                    Male
+                </option>
+
+                <option value="female"
+                {% if request.form.get('gender') == 'female' %}selected{% endif %}>
+                    Female
+                </option>
+
+            </select>
+        </div>
+
+        <!-- Ethnicity -->
+        <div class="mb-3">
+            <label class="form-label">Race or Ethnicity</label>
+
+            <select class="form-control" name="ethnicity" required>
+
+                <option value="" disabled
+                {% if not request.form.get('ethnicity') %}selected{% endif %}>
+                    Select Ethnicity
+                </option>
+
+                <option value="group A"
+                {% if request.form.get('ethnicity') == 'group A' %}selected{% endif %}>
+                    Group A
+                </option>
+
+                <option value="group B"
+                {% if request.form.get('ethnicity') == 'group B' %}selected{% endif %}>
+                    Group B
+                </option>
+
+                <option value="group C"
+                {% if request.form.get('ethnicity') == 'group C' %}selected{% endif %}>
+                    Group C
+                </option>
+
+                <option value="group D"
+                {% if request.form.get('ethnicity') == 'group D' %}selected{% endif %}>
+                    Group D
+                </option>
+
+                <option value="group E"
+                {% if request.form.get('ethnicity') == 'group E' %}selected{% endif %}>
+                    Group E
+                </option>
+
+            </select>
+        </div>
+
+        <!-- Parent Education -->
+        <div class="mb-3">
+            <label class="form-label">Parental Level of Education</label>
+
+            <select class="form-control"
+                    name="parental_level_of_education"
+                    required>
+
+                <option value="" disabled
+                {% if not request.form.get('parental_level_of_education') %}selected{% endif %}>
+                    Select Parent Education
+                </option>
+
+                <option value="associate's degree"
+                {% if request.form.get('parental_level_of_education') == "associate's degree" %}selected{% endif %}>
+                    associate's degree
+                </option>
+
+                <option value="bachelor's degree"
+                {% if request.form.get('parental_level_of_education') == "bachelor's degree" %}selected{% endif %}>
+                    bachelor's degree
+                </option>
+
+                <option value="high school"
+                {% if request.form.get('parental_level_of_education') == "high school" %}selected{% endif %}>
+                    high school
+                </option>
+
+                <option value="master's degree"
+                {% if request.form.get('parental_level_of_education') == "master's degree" %}selected{% endif %}>
+                    master's degree
+                </option>
+
+                <option value="some college"
+                {% if request.form.get('parental_level_of_education') == "some college" %}selected{% endif %}>
+                    some college
+                </option>
+
+                <option value="some high school"
+                {% if request.form.get('parental_level_of_education') == "some high school" %}selected{% endif %}>
+                    some high school
+                </option>
+
+            </select>
+        </div>
+
+        <!-- Lunch -->
+        <div class="mb-3">
+            <label class="form-label">Lunch Type</label>
+
+            <select class="form-control" name="lunch" required>
+
+                <option value="" disabled
+                {% if not request.form.get('lunch') %}selected{% endif %}>
+                    Select Lunch Type
+                </option>
+
+                <option value="free/reduced"
+                {% if request.form.get('lunch') == "free/reduced" %}selected{% endif %}>
+                    free/reduced
+                </option>
+
+                <option value="standard"
+                {% if request.form.get('lunch') == "standard" %}selected{% endif %}>
+                    standard
+                </option>
+
+            </select>
+        </div>
+
+        <!-- Test Preparation -->
+        <div class="mb-3">
+            <label class="form-label">Test preparation Course</label>
+
+            <select class="form-control"
+                    name="test_preparation_course"
+                    required>
+
+                <option value="" disabled
+                {% if not request.form.get('test_preparation_course') %}selected{% endif %}>
+                    Select Test Course
+                </option>
+
+                <option value="none"
+                {% if request.form.get('test_preparation_course') == "none" %}selected{% endif %}>
+                    None
+                </option>
+
+                <option value="completed"
+                {% if request.form.get('test_preparation_course') == "completed" %}selected{% endif %}>
+                    Completed
+                </option>
+
+            </select>
+        </div>
+
+        <!-- Reading Score -->
+        <div class="mb-3">
+            <label class="form-label">Writing Score out of 100</label>
+
+            <input class="form-control"
+                   type="number"
+                   name="reading_score"
+                   placeholder="Enter your Reading score"
+                   min="0"
+                   max="100"
+                   value="{{ request.form.get('reading_score','') }}"
+                   required>
+        </div>
+
+        <!-- Writing Score -->
+        <div class="mb-3">
+            <label class="form-label">Reading Score out of 100</label>
+
+            <input class="form-control"
+                   type="number"
+                   name="writing_score"
+                   placeholder="Enter your Writing Score"
+                   min="0"
+                   max="100"
+                   value="{{ request.form.get('writing_score','') }}"
+                   required>
+        </div>
+
+        <!-- Buttons -->
+        <div class="button-group">
+
+            <input class="btn btn-primary"
+                   type="submit"
+                   value="Predict your Maths Score">
+
+            <button type="button"
+                    class="btn btn-clear"
+                    onclick="clearForm()">
+                Clear
+            </button>
+
+        </div>
+
+    </form>
+
+    {% if results %}
+
+    <div class="result-box">
+
+        <h2>Predicted Maths Score</h2>
+
+        <div class="result">
+            {{results}}
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+<script>
+
+    function clearForm(){
+
+        document.getElementById("prediction-form").reset();
+
+        window.location.href="/predict";
+    }
+
+</script>
+
+</body>
+</html>
