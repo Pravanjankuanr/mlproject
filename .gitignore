@@ -148,6 +148,7 @@ activemq-data/
 *.sage.py
 
 # Environments
+app.py
 artifacts/
 *tempCodeRunnerFile*
 notebook/*tempCodeRunnerFile*
