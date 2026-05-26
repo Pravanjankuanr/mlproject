@@ -149,7 +149,6 @@ activemq-data/
 
 # Environments
 app.py
-artifacts/
 *tempCodeRunnerFile*
 notebook/*tempCodeRunnerFile*
 notebook/tempCodeRunnerFile.ipynb
